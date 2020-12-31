@@ -1,5 +1,6 @@
 ---
 download_dir:
+vsts_dir:
 vsts_version:
 vsts_url:
 vsts_auth:
