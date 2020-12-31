@@ -37,6 +37,13 @@
     copy: no
   when: agent_installed.rc != 0 or agent_dir is changed
 
+- name: Install VSTS dependencies
+  become: yes
+  gather_facts: false
+  shell: "{{ agent_dir }}/bin/installdependencies.sh"
+  environment:
+    AGENT_ALLOW_RUNASROOT: 1
+
 - name: Install VSTS Agent
   become: yes
   gather_facts: false
