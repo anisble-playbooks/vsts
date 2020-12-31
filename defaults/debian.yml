@@ -3,3 +3,4 @@ gather_facts: false
 download_dir: "/tmp"
 vsts_dri: "/opt/vsts"
 vsts_version: 2.175.2
+vsts_auth: PAT
