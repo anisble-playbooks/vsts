@@ -1,0 +1,5 @@
+---
+  - name: Get VSTS Build Agent
+    get_url:
+      url: "https://vstsagentpackage.azureedge.net/agent/{{ vsts_version }}/vsts-agent-linux-x64-{{ vsts_version }}.tar.gz"
+      dest: "{{ download_dir }}/vsts-agent-linux-x64-{{ vsts_version }}.tar.gz"

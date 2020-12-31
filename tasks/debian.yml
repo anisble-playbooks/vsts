@@ -1,0 +1,44 @@
+---
+- name: Create VSTS directory
+  gather_facts: false
+  file:
+    path: "{{ vsts_dir }}\\{{ ansible_hostname }}\\{{ ansible_hostname }}-agent"
+    state: directory
+  register: agent_dir
+
+- name: Create VSTS work directory
+  gather_facts: false
+  file:
+    path: "{{ agent_dir }}\\work"
+    state: directory
+  register: work_dir
+
+- name: Check VSTS version
+  gather_facts: false
+  shell: "terraform version 2>&1 | head -n 1 | grep -q {{vsts_version}}"
+  failed_when: false
+  changed_when: false
+  register: agent_installed
+
+- include: download-debian.yml
+  when: agent_installed.rc != 0
+
+- name: Install unzip to unarchive VSTS agent
+  gather_facts: false
+  package:
+    name: unzip
+    state: present
+
+- name: Unarchive VSTS archive
+  gather_facts: false
+  unarchive:
+    src: "{{ download_dir }}/{{ vsts_version }}.zip"
+    dest: "{{ agent_dir }}"
+    copy: no
+  when: agent_installed.rc != 0 or agent_dir is changed
+
+- name: Install VSTS Agent
+  gather_facts: false
+  shell: "{{ agent_dir }}\\config.cmd --unattended -url {{ vsts_url }} --auth {{ vsts_auth }} --token {{ vsts_token }} --pool {{ vsts_pool }} --agent {{ ansible_hostname }}-agent --runAsService --work {{ agent_dir }}"
+  environment:
+    AGENT_ALLOW_RUNASROOT: 1

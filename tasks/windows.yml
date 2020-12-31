@@ -1,0 +1,36 @@
+---
+- name: Create VSTS directory
+  gather_facts: false
+  win_file:
+    path: "{{ vsts_dir }}\\{{ ansible_hostname }}\\{{ ansible_hostname }}-agent"
+    state: directory
+  register: agent_dir
+
+- name: Create VSTS work directory
+  gather_facts: false
+  win_file:
+    path: "{{ agent_dir }}\\work"
+    state: directory
+  register: work_dir
+
+- name: Check VSTS Installed
+  gather_facts: false
+  win_shell: "Get-Service vstsagent*"
+  failed_when: false
+  changed_when: false
+  register: agent_installed
+
+- include: download-windows.yml
+  when: agent_installed.rc != 0
+
+- name: Unarchive VSTS archive
+  gather_facts: false
+  win_unzip:
+    src: "{{ download_dir }}\\vsts-agent-win-x64-{{ vsts_version }}.zip"
+    dest: "{{ vsts_dir }}"
+    copy: no
+  when: agent_installed.rc != 0 or agent_dir is changed
+
+- name: Install VSTS Agent
+  gather_facts: false
+  win_shell: "{{ agent_dir }}\\config.cmd --unattended -url {{ vsts_url }} --auth {{ vsts_auth }} --token {{ vsts_token }} --pool {{ vsts_pool }} --agent {{ ansible_hostname }}-agent --runAsService --windowsLogonAccount {{ vsts_account }} --windowsLogonPassword {{ vsts_password }} --work {{ agent_dir }}"
