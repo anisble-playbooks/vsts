@@ -1,2 +1,9 @@
 ---
-# vars file for framework
+download_dir:
+vsts_version:
+vsts_url:
+vsts_auth:
+vsts_token:
+vsts_pool:
+vsts_account:
+vsts_password:

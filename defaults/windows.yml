@@ -1,0 +1,4 @@
+---
+gather_facts: false
+download_dir: "C:\\Windows\\Temp"
+vsts_version: 2.175.2
