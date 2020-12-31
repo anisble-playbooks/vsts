@@ -40,6 +40,9 @@
 - name: Install VSTS Agent
   become: yes
   gather_facts: false
-  shell: "{{ agent_dir }}\\config.cmd --unattended -url {{ vsts_url }} --auth {{ vsts_auth }} --token {{ vsts_token }} --pool {{ vsts_pool }} --agent {{ ansible_hostname }}-agent --runAsService --work {{ agent_dir }}"
+  shell: "{{ agent_dir }}/config.cmd --unattended -url {{ vsts_url }} --auth {{ vsts_auth }} --token {{ vsts_token }} --pool {{ vsts_pool }} --agent {{ ansible_hostname }}-agent --runAsService --work {{ agent_dir }}"
   environment:
     AGENT_ALLOW_RUNASROOT: 1
+  notify:
+    - VSTS Service Install
+    - VSTS Service Start

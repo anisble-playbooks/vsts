@@ -1,0 +1,12 @@
+---
+- name: VSTS Service Install
+  become: yes
+  shell: "{{ agent_dir }}/svc.sh install"
+  environment:
+    AGENT_ALLOW_RUNASROOT: 1
+
+- name: VSTS Service Start
+  become: yes
+  shell: "{{ agent_dir }}/svc.sh start"
+  environment:
+    AGENT_ALLOW_RUNASROOT: 1
