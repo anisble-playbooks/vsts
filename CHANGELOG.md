@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add suppoprt for more flavors of linux
 
-## [1.0.0] - yyyy-mm-dd
+## [1.0.0] - 2020-12-31
 
 ### Added
 
-- What was added
+- New Role to install VSTS Build Agent
+- Support for Windows and Debian
